@@ -1,43 +1,32 @@
 import numpy as np
-from agent import LearnAlgo
+from agent import Agent
 
-from enviroment import create_enviroment
-from utils import pull_arm
+from utils import run_experiment
+from graph import plot_single_arm_history, plot_multi_arm_history, compare_true_value_with_estimate
 
+# Random Seed #TODO: None for now
 random_seed = None
 np.random.seed(random_seed)
 
-
-def update():
-    arm_selected = l1.epsilon_greedy()
-    reward = pull_arm(enviroment=env, arm_selected=arm_selected, s_d=1)
-    l1.update_estimate(arm_selected, reward)
+# Just for Refrence
+# tech_config = ["epsilon", "exploit", "explore"]
 
 
-arm_count = 10
+env_config = {"arm_count": 10,
+              "max_mean": 20}
+
+experiment_config = {
+    "steps": 1000,
+    "technique": "epsilon"
+}
 
 # ==========Main Loop=========#
 
-# Create Enviroment
-
-env = create_enviroment(arm_count=arm_count, max_mean=20)
-print("Enviroment value ", env)
-
-
-l1 = LearnAlgo()
-
-
-for i in range(1, 1000):
-    update()
+# Experiment Ran
+agent, env = run_experiment(Agent,
+                            steps=experiment_config["steps"], technique=experiment_config["technique"], value=0.3, env_config=env_config)
 
 # ===============Ending Loop========#
 
-
-print("*"*20)
-
-print(l1.estimated_rewards)
-
-
-gg = np.zeros(shape=(arm_count, 2))
-
-print(gg)
+# Printing graphs
+compare_true_value_with_estimate(agent, env, True)

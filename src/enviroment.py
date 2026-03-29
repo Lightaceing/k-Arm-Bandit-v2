@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def create_enviroment(arm_count, max_mean):
+def create_environment(arm_count, max_mean):
     """
     Creates K Arm Bandit Enviroment
     Returns a dictionary with arm no. and corresponding set mean.
@@ -11,6 +11,12 @@ def create_enviroment(arm_count, max_mean):
     max_mean         : maximum mean value of an arm
     """
     enviroment = {}
+
+    # Arm count should be +ve
+    if arm_count <= 0:
+        raise ValueError("Enter a value greater than 0.")
+    if type(arm_count) != int:
+        raise TypeError("Only integer values allowed")
 
     for i in range(0, arm_count):
         # Generating random value for mean
