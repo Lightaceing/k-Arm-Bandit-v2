@@ -14,41 +14,43 @@ def pull_arm(environment, arm_selected, s_d=1):
     return reward
 
 
-def update(agent, env, technique, value=0.2):
+def update(agent, env):
 
-    tech_config = ["epsilon", "exploit", "explore", "optimistic_init"]
-    if technique not in tech_config:
+    tech_config = ["epsilon", "exploit", "explore", "optimistic_init", "ucb"]
+    if agent.strategy not in tech_config:
         raise ValueError("The value should be one of ", tech_config)
+    arm_selected = 0
 
-    if technique == "epsilon":
-        arm_selected = agent.epsilon_greedy(value)
-    elif technique == "exploit":
+    if agent.strategy == "epsilon":
+        arm_selected = agent.epsilon_greedy(
+            agent.value)
+    elif agent.strategy == "exploit":
         arm_selected = agent.exploit()
-    elif technique == "explore":
+    elif agent.strategy == "explore":
         arm_selected = agent.explore()
-    elif technique == "optimistic_init":
+    elif agent.strategy == "optimistic_init":
         arm_selected = agent.exploit()
+    elif agent.strategy == "ucb":
+        arm_selected = agent.ucb(c=agent.value)
 
     reward = pull_arm(environment=env, arm_selected=arm_selected, s_d=1)
     agent.update_estimate(arm_selected, reward)
 
+    agent.update_histroy(arm_selected)
 
-def run_experiment(Agent, steps, technique, value, env_config):
+
+def run_experiment(Agent, steps, strategy, value, env_config):
 
     # Create Environment
     env = create_environment(
         arm_count=env_config["arm_count"], max_mean=env_config["max_mean"])
 
     # Create Agent
-    agent = Agent(arm_count=env_config["arm_count"])
+    agent = Agent(arm_count=env_config["arm_count"],
+                  value=value, strategy=strategy)
 
-    # Init for optimistic init
-    if technique == "optimistic_init":
-        agent.optimistic_init()
-
-    agent.optimistic_init()
-
+    # Run Epochs
     for _ in range(steps):
-        update(agent, env, technique, value)
+        update(agent, env)
 
     return agent, env
