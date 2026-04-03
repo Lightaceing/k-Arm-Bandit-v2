@@ -2,23 +2,23 @@
 
 ## Features
 
--Build non-stationary enviroment
--Build your agent
--Select epochs and stratergy
--Vizualize growth over steps
--Compare and log different stratergies
+-Build non-stationary enviroment<br>
+-Build your agent<br>
+-Select epochs and stratergy<br>
+-Vizualize growth over steps<br>
+-Compare and log different stratergies<br>
 
 ## TO Run
 
 in the file : main.py
--specify enviroment config and agent config
--select which graph to view
--log the data generated
--run the file :)
+-specify enviroment config and agent config<br>
+-select which graph to view<br>
+-log the data generated<br>
+-run the file :)<br>
 
 ## Status
 
-🚧 This project is currently a work in progress.  
-Several features and improvements are yet to be implemented.
+🚧 This project is currently a work in progress. <br>
+Several features and improvements are yet to be implemented.<br>
 
-Stay tuned for updates
+Stay tuned for updates<br>
