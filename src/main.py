@@ -18,14 +18,14 @@ env_config = {"arm_count": 10,
 
 experiment_config = {
     "steps": 1000,
-    "strategy": "ucb"
+    "strategy": "epsilon"
 }
 
 # ==========Main Loop=========#
 
 # Experiment Ran
 agent, env = run_experiment(Agent,
-                            steps=experiment_config["steps"], strategy=experiment_config["strategy"], value=2, env_config=env_config)
+                            steps=experiment_config["steps"], strategy=experiment_config["strategy"], value=0.2, env_config=env_config)
 
 # ===============Ending Loop========#
 

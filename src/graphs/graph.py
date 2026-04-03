@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import datetime
 
 
 def plot_single_arm_history(agent, arm_no=0):
@@ -19,8 +20,11 @@ def plot_single_arm_history(agent, arm_no=0):
     ax.set_xlabel("Steps")
     ax.set_title(f"Reward over steps for arm : {arm_no}")
     ax.legend()
-
+    path = "../results/"
+    filename = path + "record_" + datetime.datetime.now().strftime("%Y%m%d%H%M%S")+".png"
+    plt.savefig(filename, dpi=300, bbox_inches='tight')
     plt.show()
+    plt.close()
 
 
 def plot_multi_arm_history(agent, only_top=False, top_count=3):
@@ -52,7 +56,11 @@ def plot_multi_arm_history(agent, only_top=False, top_count=3):
     ax.set_xlabel("Steps")
     ax.set_title(f"Estimated Reward over steps for all arms")
     ax.legend()
+    path = "../results/"
+    filename = path + "record_" + datetime.datetime.now().strftime("%Y%m%d%H%M%S")+".png"
+    plt.savefig(filename, dpi=300, bbox_inches='tight')
     plt.show()
+    plt.close()
 
 
 def compare_true_value_with_estimate(agent, env, only_top=False, top_count=3, max_steps=520):
@@ -91,7 +99,11 @@ def compare_true_value_with_estimate(agent, env, only_top=False, top_count=3, ma
     ax.set_xlabel("Steps")
     ax.set_title(f"Reward over steps for all arms")
     ax.legend()
+    path = "../results/"
+    filename = path + "record_" + datetime.datetime.now().strftime("%Y%m%d%H%M%S")+".png"
+    plt.savefig(filename, dpi=300, bbox_inches='tight')
     plt.show()
+    plt.close()
 
 
 def compare_true_value_with_estimate_steps(agent, env, max_steps, only_top=False, top_count=3, legend=True):
@@ -131,3 +143,11 @@ def compare_true_value_with_estimate_steps(agent, env, max_steps, only_top=False
     if legend:
         ax.legend()
     plt.show()
+
+
+def save_graph(graph):
+    path = "../results/"
+    filename = path + "record_" + datetime.datetime.now().strftime("%Y%m%d%H%M%S")+".png"
+    plt.savefig(filename, )
+    plt.close()
+    # Log plot saved

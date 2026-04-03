@@ -7,6 +7,7 @@
 -Select epochs and stratergy<br>
 -Vizualize growth over steps<br>
 -Compare and log different stratergies<br>
+-Save Plots<br>
 
 ## TO Run
 
@@ -22,3 +23,6 @@ in the file : main.py
 Several features and improvements are yet to be implemented.<br>
 
 Stay tuned for updates<br>
+
+-Example for a plot with the best 3 arms<br>
+![alt text](image.png)
