@@ -6,7 +6,7 @@ from graphs.graph import *
 from logger_utils.logger import *
 
 # Random Seed #TODO: None for now
-random_seed = None
+random_seed = 41
 np.random.seed(random_seed)
 
 # Just for Refrence
