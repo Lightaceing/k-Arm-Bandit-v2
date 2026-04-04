@@ -18,16 +18,16 @@ env_config = {"arm_count": 10,
 
 experiment_config = {
     "steps": 1000,
-    "strategy": "epsilon"
+    "strategy": ["epsilon", "ucb", "exploit"]
 }
 
 # ==========Main Loop=========#
 
 # Experiment Ran
-agent, env = run_experiment(Agent,
-                            steps=experiment_config["steps"], strategy=experiment_config["strategy"], value=0.2, env_config=env_config)
 
-# ===============Ending Loop========#
+agents, env = compare_policies(Agent,
+                               steps=experiment_config["steps"], strategy=experiment_config["strategy"], value=0.2, env_config=env_config)
 
-# Printing graphs
-compare_true_value_with_estimate(agent, env, True, max_steps=520)
+
+# Graph printed
+compare_two_graphs(agents, env, True, max_steps=200, top_count=2)

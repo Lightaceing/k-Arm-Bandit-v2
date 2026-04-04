@@ -151,3 +151,49 @@ def save_graph(graph):
     plt.savefig(filename, )
     plt.close()
     # Log plot saved
+
+
+def compare_two_graphs(agent, env, only_top=False, top_count=3, max_steps=520):
+    """
+    Plot true values and estimated values over time
+
+    """
+    if max_steps == None:
+        max_steps = int(np.sum(agent.counts))
+    if top_count < 0:
+        raise ValueError("Top count cant be negative")
+    if type(top_count) != int:
+        raise TypeError("Top count should be an integer")
+    if type(only_top) != bool:
+        raise TypeError("Takes a boolean")
+
+    fig, ax = plt.subplots()
+
+    if only_top:
+        for each_agent in agent:
+            # Only prints the top 3 arms
+            top_arms = np.argsort(
+                each_agent.estimated_rewards)[-1*top_count:][::-1]
+            for arm in top_arms:
+                ax.plot(each_agent.history[arm]
+                        [:max_steps], label=f"Arm with strategy {each_agent.strategy} {arm}")
+                true_val = [env[arm]]*len(each_agent.history[arm])
+                ax.plot(true_val[:max_steps], linestyle="--",
+                        label=f"True Arm {arm}", alpha=0.6)
+    else:
+        for each_agent in agent:
+            for i in range(0, each_agent.arm_count):
+                ax.plot(each_agent.history[i][:max_steps], label=f"Arm {i}")
+                true_val = [env[i]]*len(each_agent.history[i])
+                ax.plot(true_val[:max_steps], linestyle="--",
+                        label=f"True Arm {i}", alpha=0.6)
+
+    ax.set_ylabel("Reward on each step")
+    ax.set_xlabel("Steps")
+    ax.set_title(f"Reward over steps for all arms")
+    ax.legend()
+    path = "../results/"
+    filename = path + "record_" + datetime.datetime.now().strftime("%Y%m%d%H%M%S")+".png"
+    plt.savefig(filename, dpi=300, bbox_inches='tight')
+    plt.show()
+    plt.close()

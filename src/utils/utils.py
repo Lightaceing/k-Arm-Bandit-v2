@@ -54,3 +54,23 @@ def run_experiment(Agent, steps, strategy, value, env_config):
         update(agent, env)
 
     return agent, env
+
+
+def compare_policies(Agent, steps, strategy, value, env_config):
+    # Create Environment
+    env = create_environment(
+        arm_count=env_config["arm_count"], max_mean=env_config["max_mean"])
+
+    agents = []
+    for each_strategy in strategy:
+        # Agent created
+        agent = Agent(arm_count=env_config["arm_count"],
+                      value=value, strategy=each_strategy)
+
+        # Run Epochs for agent1
+        for _ in range(steps):
+            update(agent, env)
+
+        agents.append(agent)
+
+    return agents, env
