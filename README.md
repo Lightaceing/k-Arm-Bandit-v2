@@ -6,8 +6,9 @@
 -Build your agent<br>
 -Select epochs and stratergy<br>
 -Vizualize growth over steps<br>
--Compare and log different stratergies<br>
+-Compare different stratergies<br>
 -Save Plots<br>
+-Save Logs<br>
 
 ## TO Run
 
@@ -25,4 +26,5 @@ Several features and improvements are yet to be implemented.<br>
 Stay tuned for updates<br>
 
 -Example for a plot with the best 3 arms<br>
-![alt text](image.png)
+
+![alt text](image-1.png)
