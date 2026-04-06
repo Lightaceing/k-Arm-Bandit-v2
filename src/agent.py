@@ -12,15 +12,16 @@ class Agent:
             raise ValueError("Enter a value greater than 0.")
         if type(arm_count) != int:
             raise TypeError("Only integer values allowed")
-
+        self.optimal_arm = 0
         self.arm_count = arm_count
         self.estimated_rewards = np.zeros(
             shape=arm_count)  # Default is all zeros
         self.counts = np.zeros(shape=arm_count)
         self.strategy = strategy
         self.value = value
-
+        self.optimal_action_history = []
         # For graph
+        self.reward_history = []
         self.history = []
         self.arm_select_history = []
         # Creating history

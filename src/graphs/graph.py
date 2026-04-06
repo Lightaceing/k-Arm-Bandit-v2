@@ -27,7 +27,7 @@ def plot_single_arm_history(agent, arm_no=0):
     plt.close()
 
 
-def plot_multi_arm_history(agent, only_top=False, top_count=3):
+def plot_multi_arm_history(agent, only_top=False, top_count=3, custom_title=None):
     """
     Plot all the arm's reward over multiple steps
 
@@ -37,8 +37,8 @@ def plot_multi_arm_history(agent, only_top=False, top_count=3):
         raise ValueError("Top count cant be negative")
     if type(top_count) != int:
         raise TypeError("Top count should be an integer")
-    if only_top != bool:
-        raise TypeError("Takes a boolean")
+    # if only_top != bool:
+    #     raise TypeError("Takes a boolean")
 
     fig, ax = plt.subplots()
 
@@ -54,7 +54,10 @@ def plot_multi_arm_history(agent, only_top=False, top_count=3):
 
     ax.set_ylabel("Estimated Reward on each step")
     ax.set_xlabel("Steps")
-    ax.set_title(f"Estimated Reward over steps for all arms")
+    if custom_title == None:
+        ax.set_title(f"Estimated Reward over steps for all arms")
+    else:
+        ax.set_title(custom_title)
     ax.legend()
     path = "../results/"
     filename = path + "record_" + datetime.datetime.now().strftime("%Y%m%d%H%M%S")+".png"
@@ -63,7 +66,7 @@ def plot_multi_arm_history(agent, only_top=False, top_count=3):
     plt.close()
 
 
-def compare_true_value_with_estimate(agent, env, only_top=False, top_count=3, max_steps=520):
+def compare_true_value_with_estimate(agent, env, only_top=False, top_count=3, max_steps=520, custom_title=None):
     """
     Plot true values and estimated values over time
 
@@ -97,7 +100,10 @@ def compare_true_value_with_estimate(agent, env, only_top=False, top_count=3, ma
 
     ax.set_ylabel("Reward on each step")
     ax.set_xlabel("Steps")
-    ax.set_title(f"Reward over steps for all arms")
+    if custom_title == None:
+        ax.set_title(f"Estimated Reward over steps for all arms")
+    else:
+        ax.set_title(custom_title)
     ax.legend()
     path = "../results/"
     filename = path + "record_" + datetime.datetime.now().strftime("%Y%m%d%H%M%S")+".png"
@@ -106,7 +112,7 @@ def compare_true_value_with_estimate(agent, env, only_top=False, top_count=3, ma
     plt.close()
 
 
-def compare_true_value_with_estimate_steps(agent, env, max_steps, only_top=False, top_count=3, legend=True):
+def compare_true_value_with_estimate_steps(agent, env, max_steps, only_top=False, top_count=3, legend=True, custom_title=None):
     """
     Plot true values and estimated values over time
 
@@ -139,7 +145,10 @@ def compare_true_value_with_estimate_steps(agent, env, max_steps, only_top=False
 
     ax.set_ylabel("Reward on each step")
     ax.set_xlabel("Steps")
-    ax.set_title(f"Reward over steps for all arms")
+    if custom_title == None:
+        ax.set_title(f"Estimated Reward over steps for all arms")
+    else:
+        ax.set_title(custom_title)
     if legend:
         ax.legend()
     plt.show()
@@ -153,7 +162,7 @@ def save_graph(graph):
     # Log plot saved
 
 
-def compare_two_graphs(agent, env, only_top=False, top_count=3, max_steps=520):
+def compare_two_graphs(agent, env, only_top=False, top_count=3, max_steps=520, custom_title=None):
     """
     Plot true values and estimated values over time
 
@@ -191,6 +200,30 @@ def compare_two_graphs(agent, env, only_top=False, top_count=3, max_steps=520):
     ax.set_ylabel("Reward on each step")
     ax.set_xlabel("Steps")
     ax.set_title(f"Reward over steps for all arms")
+    ax.legend()
+    path = "../results/"
+    filename = path + "record_" + datetime.datetime.now().strftime("%Y%m%d%H%M%S")+".png"
+    plt.savefig(filename, dpi=300, bbox_inches='tight')
+    plt.show()
+    plt.close()
+
+
+def plot_graph(agent, arm_no=0):
+    """
+    Plot a single arm's reward over multiple steps
+
+    """
+    if arm_no < 0:
+        raise ValueError("Arm cant be negative")
+    if type(arm_no) != int:
+        raise TypeError("Arm no should be an integer")
+    fig, ax = plt.subplots()
+
+    ax.plot(agent.history[arm_no])
+
+    ax.set_ylabel("Reward on each step")
+    ax.set_xlabel("Steps")
+    ax.set_title(f"Reward over steps for arm : {arm_no}")
     ax.legend()
     path = "../results/"
     filename = path + "record_" + datetime.datetime.now().strftime("%Y%m%d%H%M%S")+".png"

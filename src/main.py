@@ -6,7 +6,7 @@ from graphs.graph import *
 from logger_utils.logger import *
 
 # Random Seed #TODO: None for now
-random_seed = 41
+random_seed = 44
 np.random.seed(random_seed)
 
 # Just for Refrence
@@ -25,9 +25,18 @@ experiment_config = {
 
 # Experiment Ran
 
-agents, env = compare_policies(Agent,
-                               steps=experiment_config["steps"], strategy=experiment_config["strategy"], value=0.2, env_config=env_config)
+
+agents, env, avg_rewards = compare_over_n_runs(Agent,
+                                               steps=experiment_config["steps"], strategy="epsilon", value=0.07, env_config=env_config, n_runs=20000)
+
+# Graph
+
+# compare_true_value_with_estimate(
+#     agents, env, only_top=True, top_count=3, max_steps=220, custom_title="Estimates over 220 runs")
 
 
-# Graph printed
-compare_two_graphs(agents, env, True, max_steps=200, top_count=2)
+plt.plot(avg_rewards)
+plt.title("Average Reward over Time")
+plt.xlabel("Steps")
+plt.ylabel("Reward")
+plt.show()

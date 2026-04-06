@@ -34,8 +34,9 @@ def update(agent, env):
         arm_selected = agent.ucb(c=agent.value)
 
     reward = pull_arm(environment=env, arm_selected=arm_selected, s_d=1)
+    agent.reward_history.append(reward)
     agent.update_estimate(arm_selected, reward)
-
+    agent.optimal_action_history.append(arm_selected == agent.optimal_arm)
     agent.update_histroy(arm_selected)
 
 
@@ -48,6 +49,7 @@ def run_experiment(Agent, steps, strategy, value, env_config):
     # Create Agent
     agent = Agent(arm_count=env_config["arm_count"],
                   value=value, strategy=strategy)
+    agent.optimal_arm = max(env, key=env.get)
 
     # Run Epochs
     for _ in range(steps):
@@ -57,9 +59,14 @@ def run_experiment(Agent, steps, strategy, value, env_config):
 
 
 def compare_policies(Agent, steps, strategy, value, env_config):
+
     # Create Environment
     env = create_environment(
-        arm_count=env_config["arm_count"], max_mean=env_config["max_mean"])
+        arm_count=env_config["arm_count"],
+        max_mean=env_config["max_mean"]
+    )
+
+    optimal_arm = max(env, key=env.get)
 
     agents = []
     for each_strategy in strategy:
@@ -70,7 +77,34 @@ def compare_policies(Agent, steps, strategy, value, env_config):
         # Run Epochs for agent1
         for _ in range(steps):
             update(agent, env)
-
+        agent.optimal_arm = optimal_arm
         agents.append(agent)
 
     return agents, env
+
+
+def compare_over_n_runs(Agent, steps, strategy, value, env_config, n_runs):
+
+    # Create Environment
+    env = create_environment(
+        arm_count=env_config["arm_count"], max_mean=env_config["max_mean"])
+    all_rewards = []
+    all_optimal = []
+    for _ in range(n_runs):
+
+        agent = Agent(arm_count=env_config["arm_count"],
+                      value=value, strategy=strategy)
+        agent.optimal_arm = max(env, key=env.get)
+
+        # Run Epochs
+        for _ in range(steps):
+            update(agent, env)
+
+        # all_runs.append(agent.reward)
+        all_rewards.append(agent.reward_history)
+        all_optimal.append(agent.optimal_action_history)
+
+    averages = np.mean(np.array(all_rewards), axis=0)
+    avg_optimal = np.mean(np.array(all_optimal), axis=0)
+    agent.history = averages
+    return agent, env, averages
