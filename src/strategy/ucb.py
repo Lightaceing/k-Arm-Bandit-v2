@@ -1,0 +1,20 @@
+from strategy.base import Strategy
+
+import numpy as np
+
+
+class UCB(Strategy):
+
+    def __init__(self, c):
+        self.c = c
+
+    def select_arm(self, agent):
+        for i in range(len(agent.counts)):
+            if agent.counts[i] == 0:
+                return i
+        total_count = np.sum(agent.counts)
+
+        explore_criteria = self.c * \
+            np.sqrt(np.log(total_count)/(np.array(agent.counts)))
+        arm = np.argmax(agent.estimated_rewards + explore_criteria)
+        return arm
