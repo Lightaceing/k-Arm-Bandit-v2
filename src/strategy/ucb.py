@@ -6,6 +6,7 @@ import numpy as np
 class UCB(Strategy):
 
     def __init__(self, c):
+        self.name = "UCB"
         self.c = c
 
     def select_arm(self, agent):

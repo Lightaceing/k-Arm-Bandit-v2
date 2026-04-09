@@ -8,6 +8,7 @@ import numpy as np
 class EpsilonGreedy(Strategy):
 
     def __init__(self, epsilon_value: float):
+        self.name = "Epsilon Greedy"
         self.epsilon_value = epsilon_value
         self.explore = Explore()
         self.exploit = Exploit()

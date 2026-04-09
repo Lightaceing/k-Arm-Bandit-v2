@@ -25,6 +25,5 @@ Several features and improvements are yet to be implemented.<br>
 
 Stay tuned for updates<br>
 
--Example for a plot with the best 3 arms<br>
-
-![alt text](image-1.png)
+-Example for comparison between two Strategy
+![alt text](<results/comparison between two strategies.png>)
