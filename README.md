@@ -26,4 +26,4 @@ Several features and improvements are yet to be implemented.<br>
 Stay tuned for updates<br>
 
 -Example for comparison between two Strategy
-![alt text](image.png)
+![alt text](image-1.png)
