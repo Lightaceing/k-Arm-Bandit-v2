@@ -1,8 +1,5 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import datetime
-
-from utils.utils import save_image_to_disk
 
 
 def put_label(ax, title, xlabel=None, ylabel=None):
@@ -26,7 +23,7 @@ def put_label(ax, title, xlabel=None, ylabel=None):
     ax.legend()
 
 
-def plot_arm_estimate(agent, arm_no, max_steps=None, ax=None, custom_label=None, custom_title=None, save_image=False,  save_as="single_arm_estimate"):
+def plot_arm_estimate(agent, arm_no, max_steps=None, ax=None, custom_label=None, custom_title=None):
     """
     Plot graph for one specific arm
     Args :
@@ -35,8 +32,6 @@ def plot_arm_estimate(agent, arm_no, max_steps=None, ax=None, custom_label=None,
     max_steps : the maximum no. of steps to be plotted
     ax : axis to plot the graph on | creates new if None is given
     custom_label : Custom label 
-    save_image : Whether to save plot as an image or not | Def : False
-    save_as : Name of the file | Def: single_arm_estimate 
     """
 
     if ax is None:
@@ -65,11 +60,9 @@ def plot_arm_estimate(agent, arm_no, max_steps=None, ax=None, custom_label=None,
             label=f"True Arm {arm_no}", alpha=0.6)
 
     put_label(ax, custom_title)
-    if save_image is True:
-        save_image_to_disk(plt, filename=save_as)
 
 
-def plot_multiple_arms(agent, ax, only_top=False, top_count=3, max_steps=None, custom_label=None, custom_title=None, save_image=False,  save_as="multiple_arm_estimate"):
+def plot_multiple_arms(agent, ax=None, only_top=False, top_count=3, max_steps=None, custom_label=None, custom_title=None):
     """
     Plots estimated rewards of multiple arms of an agent
     Args :
@@ -79,8 +72,6 @@ def plot_multiple_arms(agent, ax, only_top=False, top_count=3, max_steps=None, c
     top_count : No. of top estimated arms to be plotted | Def : 3 | 
     max_steps : the maximum no. of steps to be plotted
     custom_label : Custom label | Def : "Graph of multiple arms"
-    save_image : Whether to save plot as an image or not | Def : False
-    save_as : Name of the file | Def: multiple_arm_estimate
     """
 
     if ax == None:
@@ -107,11 +98,9 @@ def plot_multiple_arms(agent, ax, only_top=False, top_count=3, max_steps=None, c
     if custom_label is None:
         custom_title = "Graph of multiple arms"
     put_label(ax, title=custom_title)
-    if save_image is True:
-        save_image_to_disk(plt, filename=save_as)
 
 
-def plot_single_arm_history(agent, arm_no, max_steps, ax=None, custom_title=None, save_image=False,  save_as="single_arm_history"):
+def plot_single_arm_history(agent, arm_no, max_steps=None, ax=None, custom_title=None):
     """
     Plot graph for one specific arm
     Args :
@@ -119,9 +108,7 @@ def plot_single_arm_history(agent, arm_no, max_steps, ax=None, custom_title=None
     arm_no : the arm to be plotted
     max_steps : the maximum no. of steps to be plotted
     ax : axis to plot the graph on | creates new if None is given
-    custom_title : Custom title : 
-    save_image : Whether to save plot as an image or not | Def : False
-    save_as : Name of the file | Def: single_arm_estimate 
+    custom_title : Custom title for the plot
     """
 
     if ax == None:
@@ -141,11 +128,8 @@ def plot_single_arm_history(agent, arm_no, max_steps, ax=None, custom_title=None
         custom_title = f"Reward over steps for arm : {arm_no}"
     put_label(ax, custom_title)
 
-    if save_image is True:
-        save_image_to_disk(plt, filename=save_as)
 
-
-def plot_comparision(agents, only_top=False, top_count=3, max_steps=None, custom_title=None, save_image=False,  save_as="strategy_comparison"):
+def plot_comparision(agents, only_top=False, top_count=3, max_steps=None, custom_title=None):
     """
     Plot graph for one specific arm
     Args :
@@ -154,8 +138,6 @@ def plot_comparision(agents, only_top=False, top_count=3, max_steps=None, custom
     top_count : No. of top estimated arms to be plotted | Def : 3 | 
     max_steps : the maximum no. of steps to be plotted
     custom_title : Custom title | Def : strategy1  VS  Strategy"
-    save_image : Whether to save plot as an image or not | Def : False
-    save_as : Name of the file | Def: strategy_comparison
     """
 
     fig, ax = plt.subplots()
@@ -170,5 +152,21 @@ def plot_comparision(agents, only_top=False, top_count=3, max_steps=None, custom
                            max_steps=max_steps, custom_label=agent.strategy.name, custom_title=custom_title)
 
     put_label(ax, title=custom_title)
-    if save_image is True:
-        save_image_to_disk(plt, filename=save_as)
+
+
+def plot_cumulative_reward(mean, label, ax=None):
+    if ax is None:
+        fig, ax = plt.subplots()
+
+    ax.plot(mean, label=label)
+
+
+def compare_graphs(means, label, title="Cumultive reward over steps",
+                   xlabel="Steps", ylabel="Total Reward"):
+
+    fig, ax = plt.subplots()
+
+    for i in range(0, len(means)):
+        plot_cumulative_reward(means[i], label=label[i], ax=ax)
+
+    put_label(ax=ax, title=title, xlabel=xlabel, ylabel=ylabel)

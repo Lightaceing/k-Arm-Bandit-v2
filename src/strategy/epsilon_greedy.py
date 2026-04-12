@@ -1,11 +1,17 @@
-from strategy.base import Strategy
-from strategy.exploit import Exploit
-from strategy.explore import Explore
+from .base import Strategy
+from .exploit import Exploit
+from .explore import Explore
 
 import numpy as np
 
 
 class EpsilonGreedy(Strategy):
+
+    """
+    Epsilon Greedy Class 
+    Explores with epsilon probability
+    Exploits with 1-epsilon probability
+    """
 
     def __init__(self, epsilon_value: float):
         self.name = "Epsilon Greedy"

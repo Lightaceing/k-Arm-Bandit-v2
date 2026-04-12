@@ -9,6 +9,7 @@
 -Compare different stratergies<br>
 -Save Plots<br>
 -Save Logs<br>
+-Save data directly into csv<br>
 
 ## TO Run
 
@@ -18,12 +19,15 @@ in the file : main.py
 -log the data generated<br>
 -run the file :)<br>
 
-## Status
+## Quick tips
 
-🚧 This project is currently a work in progress. <br>
-Several features and improvements are yet to be implemented.<br>
+#### Refer to examples
 
-Stay tuned for updates<br>
+-Initialize Enviroment
+-Initialize Agent
+-Run experiment
+-Plot Graph
+-Retrieve Data
 
 -Example for comparison between two Strategy
 ![alt text](image-1.png)

@@ -1,4 +1,4 @@
-from strategy.base import Strategy
+from .base import Strategy
 
 import numpy as np
 

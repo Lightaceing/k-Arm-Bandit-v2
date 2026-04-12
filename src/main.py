@@ -1,27 +1,35 @@
-import numpy as np
-import matplotlib.pyplot as plt
-from envrionment.environment import Environment
-from agent.agents import Agent
-from strategy import Strategy, Exploit, Explore, EpsilonGreedy, UCB
+# Third-part libraries
+from src import sys, np, plt
 
-from graphs.graph import plot_single_arm_history, plot_multiple_arms, plot_arm_estimate, plot_comparision
-from utils.utils import average_over_n_runs, compare_policies, run_experiment
-
-from logger_utils.logger import *
-
-# Random Seed #TODO: None for now
-random_seed = None
-np.random.seed(random_seed)
+# Modules imported
+from src import environment, agents, strategy, graph, util
 
 
-env = Environment(arm_count=10, max_mean=200, s_d=30)
+def main():
+    # Random Seed #TODO: None for now
+    random_seed = None
+    np.random.seed(random_seed)
 
-agent1 = Agent(env, strategy=EpsilonGreedy(0.4))
-agent2 = Agent(env, strategy=UCB(2))
+    env = environment.Environment(arm_count=10, max_mean=200, s_d=1)
 
-agents = [agent1, agent2]
+    a = agents.Agent(env, strategy.EpsilonGreedy(0.2))
 
-compare_policies(agents=agents, steps=2000)
-plot_comparision(agents, True, 2, save_as="comparison between two strategies")
-plt.show()
-plt.close()
+    util.run_experiment(agent=a, steps=2000)
+
+    graph.plot_single_arm_history(a, arm_no=3)
+    util.save_image_to_disk("single_arm_run")
+
+    # agent_conf = [[env, EpsilonGreedy(0.4)], [env, EpsilonGreedy(0.2)], [
+    #     env, UCB(2)]]
+
+    # means = utils.compare_rewards(agent_conf=agent_conf, steps=500, runs=2000)
+
+    # graph.compare_graphs(means, label=["Epsilon Greedy 0.4", "Epsilon Greedy 0.2", "UCB 2"], title="Cumultive reward over steps",
+    #                      xlabel="Steps", ylabel="Total Reward")
+
+    plt.show()
+    plt.close()
+
+
+if __name__ == "__main__":
+    main()

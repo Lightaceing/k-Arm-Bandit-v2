@@ -1,4 +1,6 @@
 import numpy as np
+from src.logger_utils.runtime_logs import record_logs
+from src.logger_utils.save_data import init_csv, record_csv
 
 
 class Agent():
@@ -28,7 +30,7 @@ class Agent():
         # Declared for update_estimate
         self.counts = np.zeros(shape=environment.arm_count)
         self.reward_history = []
-
+        self.cumulative_reward = 0
         self.reward_history_per_arm = []
         for _ in range(self.environment.arm_count):
             self.reward_history_per_arm.append([])
@@ -38,14 +40,21 @@ class Agent():
         for _ in range(self.environment.arm_count):
             self.estimate_history.append([])
 
+        # CSV File initiated
+        init_csv()
+
+        filename = record_logs(
+            f"Agent Initialized with strategy : {self.strategy.name}.\n")
+
     def change_strategy(self, new_strategy):
         self.strategy = new_strategy
 
-    def select_policy(self,):
-        pass
-
     def select_arm(self):
-        return self.strategy.select_arm(self)
+        """
+        Returns arm selected based on the strategy
+        """
+        arm_selected = self.strategy.select_arm(self)
+        return arm_selected
 
     def update_estimate_history(self):
         for i in range(self.environment.arm_count):
@@ -66,20 +75,32 @@ class Agent():
         self.update_estimate(arm_selected=arm, reward=reward)
 
         self.actions_taken.append(arm)
+
         self.epochs_taken += 1
-        # self.past_strategy_used
 
-        self.optimal_action_history.append(
-            (arm == self.environment.optimal_arm).item())
+        isOptimal = (arm == self.environment.optimal_arm).item()
+        self.optimal_action_history.append(isOptimal)
 
+        self.cumulative_reward += reward
         self.reward_history.append(reward)
+
         self.update_reward_history_per_arm(arm_selected=arm, reward=reward)
 
         self.update_estimate_history()
+
+        record_csv(epoch=self.epochs_taken,
+                   strategy=self.strategy.name,
+                   arm=arm,
+                   reward=reward,
+                   cumulative=self.cumulative_reward,
+                   optimal=isOptimal)
+
+        record_logs(
+            f"Epoch: {self.epochs_taken} | Arm: {arm} | Current Reward: {reward:.3f} | Cumulative Reward : {self.cumulative_reward:.3f} | Current Strategy : {self.strategy.name}")
+
         return reward
 
     def update_estimate(self, arm_selected, reward):
-        # Copied from older version
         self.counts[arm_selected] += 1  # Track of each arm selected
 
         old_value = self.estimated_rewards[arm_selected]
@@ -100,6 +121,7 @@ class Agent():
             self.estimated_rewards = (self.environment.base_truth + value)
         else:
             self.estimated_rewards = np.ones(self.environment.arm_count)*value
+        record_logs("Initial Estimates Set to Optimistic estimates.")
 
     def initialize_zeros(self):
         """

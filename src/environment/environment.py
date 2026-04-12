@@ -1,4 +1,5 @@
 import numpy as np
+from src.logger_utils.runtime_logs import record_logs
 
 
 class Environment:
@@ -23,6 +24,7 @@ class Environment:
         )
 
         self.optimal_arm = np.argmax(self.base_truth, axis=0)
+        record_logs("Environment Created.")
 
     def get_reward(self, arm):
         arm_mean = self.base_truth[arm]
