@@ -7,6 +7,7 @@ class Explore(Strategy):
 
     def __init__(self):
         self.name = "Explore"
+        self.value = None
 
     def select_arm(self, agent):
         # Selects the arm randomly

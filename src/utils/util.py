@@ -1,12 +1,10 @@
 import numpy as np
-from tqdm import trange
 from src.logger_utils.runtime_logs import record_logs
 import matplotlib.pyplot as plt
 from src.agent.agents import Agent
 
 from rich.progress import Progress
 from rich.panel import Panel
-import copy
 
 
 def show_info(agent):

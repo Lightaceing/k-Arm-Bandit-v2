@@ -16,7 +16,6 @@ def take_logs(agent):
 
 
 def record_logs(log: str, filename=None):
-
     # Write log
     with open(LOG_FILE, "a") as f:
         f.write(log)

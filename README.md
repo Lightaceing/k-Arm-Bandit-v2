@@ -1,33 +1,58 @@
-# k Arm Bandit Emulator
+# k-Arm-Bandit-v2
+
+A modular Python framework for simulating, benchmarking, and visualizing Multi-Armed Bandit strategies.
 
 ## Features
 
--Build non-stationary enviroment<br>
--Build your agent<br>
--Select epochs and stratergy<br>
--Vizualize growth over steps<br>
--Compare different stratergies<br>
--Save Plots<br>
--Save Logs<br>
--Save data directly into csv<br>
+- Epsilon Greedy
+- UCB
+- Stationary environments
+- Non-stationary environments
+- Regret tracking
+- CSV experiment logging
+- Plotting utilities
 
-## TO Run
+## Installation
 
-in the file : main.py
--specify enviroment config and agent config<br>
--select which graph to view<br>
--log the data generated<br>
--run the file :)<br>
+pip install -r requirements.txt
+
+## Examples
+
+python -m examples.epsilon_greedy
+python -m examples.ucb
+python -m examples.non_stationary
+
+## Usage
+
+python -m src.main
+
+## Implemented Strategies
+
+| Strategy               | Description                                     |
+|------------------------|-------------------------------------------------|
+| Exploration            | Arm is selected randomly                        |
+| Exploitation           | The arm with the best known value is selected   |
+| Epsilon Greedy         | Explores with (ε) and Exploits with  (1-ε)      |
+| Upper Confidence Bound | Balances estimates and uncertainty              |
+
+## Example Results
+
+![alt text](image-1.png)
+
+## Project Structure
+
+src/          core framework  
+examples/     ready-to-run demos  
+results/      logs and output plots  
+tests/        unit tests
+
+## Future Work
+
+- Thompson Sampling
+- Softmax Exploration
 
 ## Quick tips
 
 #### Refer to examples
 
--Initialize Enviroment
--Initialize Agent
--Run experiment
--Plot Graph
--Retrieve Data
-
--Example for comparison between two Strategy
-![alt text](image-1.png)
+#### To view the graphs set plot=True

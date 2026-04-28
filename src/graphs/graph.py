@@ -111,7 +111,7 @@ def plot_agent_reward_history(reward_history, title=None, label=None, ax=None, x
     put_label(ax, title=title, xlabel=xlabel, ylabel=ylabel, plot=plot)
 
 
-def plot_comparision(agents, only_top=False, top_count=3, max_steps=None, custom_title=None):
+def plot_comparison(agents, only_top=False, top_count=3, max_steps=None, custom_title=None):
     """
     Plot graph for one specific arm
     Args :
@@ -136,7 +136,7 @@ def plot_comparision(agents, only_top=False, top_count=3, max_steps=None, custom
     put_label(ax, title=custom_title)
 
 
-def compare_reward_history(agent_list, title="Cumultive reward over steps",
+def compare_reward_history(agent_list, title="Cumulative reward over steps",
                            xlabel="Steps", ylabel="Total Reward", plot=False):
 
     fig, ax = plt.subplots()

@@ -19,7 +19,7 @@ import src.logger_utils.runtime_logs as runtime_logs
 
 # ========================Code Start==========#
 
-# Create Enviroment
+# Create Environment
 env = environment.Environment(arm_count=10, max_mean=200, s_d=1)
 
 # Create Agent

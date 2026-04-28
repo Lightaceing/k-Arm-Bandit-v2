@@ -1,22 +1,38 @@
 import numpy as np
-import tqdm
 
 from src.logger_utils.runtime_logs import record_logs
-from src.logger_utils.save_data import init_csv, record_csv
+from src.logger_utils.save_data import init_csv, record_csv, log_run
 
 
 class Agent():
 
     """
-    Refactored Agent class
+    Creates a learning agent for the k-Armed Bandit problem.
 
+    The agent interacts with an environment by selecting arms according to
+    a chosen strategy, receiving rewards, and updating reward estimates
+    over time.
 
+    Features tracked by the agent include:
+
+    - Estimated reward values for each arm
+    - Number of times each arm has been selected
+    - Reward history
+    - Cumulative reward
+    - Regret per step and cumulative regret
+    - Optimal action selection rate
+    - Estimate history for visualization/logging
+
+    Attributes :
+        environment : Environment object
+        strategy : Strategy object
+        Strategy object responsible for selecting arms
 
     """
 
     def __init__(self, environment, strategy):
 
-        # Attribtues taken from enviroment object
+        # Attributes taken from environment object
         self.environment = environment
 
         # Taken from strategy
@@ -25,19 +41,23 @@ class Agent():
         # New attributes defined
         self.estimated_rewards = np.zeros(
             self.environment.arm_count)  # By default defined as 0
+
         # self.past_strategy_used = {strategy: 0}
         self.actions_taken = []
         self.epochs_taken = 0
         self.optimal_action_history = []
+
         # Declared for update_estimate
-        self.counts = np.zeros(shape=environment.arm_count)
+        self.action_counts = np.zeros(shape=environment.arm_count)
         self.reward_history = []
         self.cumulative_reward = 0
         self.reward_history_per_arm = []
+
         for _ in range(self.environment.arm_count):
             self.reward_history_per_arm.append([])
 
         self.estimate_history = []
+
         # Creating history
         for _ in range(self.environment.arm_count):
             self.estimate_history.append([])
@@ -68,7 +88,7 @@ class Agent():
         for i in range(self.environment.arm_count):
             self.estimate_history[i].append(self.estimated_rewards[i])
 
-    # TODO:Remove redudancy in zeros
+    # TODO:Remove redundancy in zeros
     def update_reward_history_per_arm(self, arm_selected, reward):
         for i in range(self.environment.arm_count):
             if arm_selected == i:
@@ -99,7 +119,8 @@ class Agent():
         self.optimal_rate = np.cumsum(
             self.optimal_action_history) / np.arange(1, len(self.optimal_action_history)+1)
 
-        step_regret = self.environment.max_mean - reward
+        step_regret = (
+            self.environment.base_truth[self.environment.optimal_arm]) - reward
         self.current_regret.append(step_regret)
 
         if len(self.cumulative_regret) == 0:
@@ -123,20 +144,20 @@ class Agent():
         return reward
 
     def update_estimate(self, arm_selected, reward):
-        self.counts[arm_selected] += 1  # Track of each arm selected
+        self.action_counts[arm_selected] += 1  # Track of each arm selected
 
         old_value = self.estimated_rewards[arm_selected]
 
         self.estimated_rewards[arm_selected] = old_value + (
-            1/self.counts[arm_selected])*(reward - old_value)
+            1/self.action_counts[arm_selected])*(reward - old_value)
 
     def initialize_optimistically(self, value: float, increment: bool = False):
         """
-        Intialize estimated rewards
+        initialize estimated rewards
 
         Args : 
-                value : intialize to specific value
-                increment : intial estimate = base_truth +  'value' 
+                value : initialize to specific value
+                increment : initial estimate = base_truth +  'value' 
         """
 
         if increment:
@@ -152,8 +173,5 @@ class Agent():
         """
         self.estimated_rewards = np.zeros(self.environment.arm_count)
 
-    def reinitalize_agent(self):
-        self.reward_history = []
-
-    def update_enviroment(self, new_enviroment):
-        self.environment = new_enviroment
+    def update_environment(self, new_environment):
+        self.environment = new_environment
