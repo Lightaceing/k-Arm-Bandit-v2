@@ -23,20 +23,20 @@ import src.logger_utils.runtime_logs as runtime_logs
 env = environment.Environment(arm_count=10, max_mean=200, s_d=1)
 
 # Created Agent and config
-agent_conf = [[env, strategy.EpsilonGreedy(0.4)], [env, strategy.EpsilonGreedy(0.2)], [
-    env, strategy.UCB(2)]]
+agent1 = agents.Agent(environment=env, strategy=strategy.EpsilonGreedy(0.3))
+agent2 = agents.Agent(environment=env, strategy=strategy.UCB(2))
 
-# Run experiment by comparing rewards b/w multiple agents averaging over 2000 runs
-# This creates multiple agents based on config and runs them on it own.
-means = util.compare_rewards(agent_conf=agent_conf, steps=500, runs=2000)
+all_agents = [agent1, agent2]
+
+# Run all the agents
+util.compare_policies(agent_list=all_agents, steps=1000)
 
 # Plot all of their graphs against each other
-graph.compare_graphs(means, label=["Epsilon Greedy 0.4", "Epsilon Greedy 0.2", "UCB 2"], title="Cumultive reward over steps",
-                     xlabel="Steps", ylabel="Total Reward")
+graph.compare_reward_history(all_agents, title="Cumultive reward over steps",
+                             xlabel="Steps", ylabel="Total Reward", plot=True)
 
-
-# To see the arms
-plt.show()
+graph.compare_optimal_action(all_agents, title="Cumultive reward over steps",
+                             xlabel="Steps", ylabel="Total Reward", plot=True)
 
 
 # Save the images

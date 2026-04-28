@@ -29,14 +29,12 @@ agent = agents.Agent(environment=env, strategy=strategy.EpsilonGreedy(0.7))
 # Run Experiment
 util.run_experiment(agent=agent, steps=600)
 
-# Plot the graph of a specific arm
-graph.plot_single_arm_estimate(agent=agent, arm_no=3, plot=True)
+# New enviroment creaated
+new_env = environment.Environment(arm_count=10, max_mean=1000, s_d=1)
 
+# Updating environment
+agent.update_enviroment(new_env)
 
-# Plot the graph of a top 4 arm estimates
-graph.plot_multiple_arm_estimate(agent=agent, ax=None,
-                                 only_top=True, top_count=4, plot=True)
+util.run_experiment(agent=agent, steps=600)
 
-
-# Save the images
-# util.save_image_to_disk("single_arm_run")
+graph.plot_multiple_arm_estimate(agent, only_top=True, plot=True)

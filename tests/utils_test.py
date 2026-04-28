@@ -19,24 +19,14 @@ import src.logger_utils.runtime_logs as runtime_logs
 
 # ========================Code Start==========#
 
-
 # Create Enviroment
 env = environment.Environment(arm_count=10, max_mean=200, s_d=1)
 
 # Create Agent
-agent = agents.Agent(environment=env, strategy=strategy.EpsilonGreedy(0.7))
+agent1 = agents.Agent(environment=env, strategy=strategy.UCB(2))
+agent2 = agents.Agent(environment=env, strategy=strategy.EpsilonGreedy(0.3))
 
-# Run Experiment
-util.run_experiment(agent=agent, steps=600)
+all_agents = [agent1, agent2]
 
-# Plot the graph of a specific arm
-graph.plot_single_arm_estimate(agent=agent, arm_no=3, plot=True)
-
-
-# Plot the graph of a top 4 arm estimates
-graph.plot_multiple_arm_estimate(agent=agent, ax=None,
-                                 only_top=True, top_count=4, plot=True)
-
-
-# Save the images
-# util.save_image_to_disk("single_arm_run")
+util.compare_policies(agent_list=all_agents, steps=1000)
+graph.compare_optimal_action(agent_list=all_agents, plot=True)

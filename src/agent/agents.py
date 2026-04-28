@@ -1,4 +1,6 @@
 import numpy as np
+import tqdm
+
 from src.logger_utils.runtime_logs import record_logs
 from src.logger_utils.save_data import init_csv, record_csv
 
@@ -40,8 +42,14 @@ class Agent():
         for _ in range(self.environment.arm_count):
             self.estimate_history.append([])
 
+        self.optimal_rate = np.zeros(10)
+
         # CSV File initiated
         init_csv()
+
+        # Regret calculation
+        self.current_regret = []
+        self.cumulative_regret = []
 
         filename = record_logs(
             f"Agent Initialized with strategy : {self.strategy.name}.\n")
@@ -88,6 +96,19 @@ class Agent():
 
         self.update_estimate_history()
 
+        self.optimal_rate = np.cumsum(
+            self.optimal_action_history) / np.arange(1, len(self.optimal_action_history)+1)
+
+        step_regret = self.environment.max_mean - reward
+        self.current_regret.append(step_regret)
+
+        if len(self.cumulative_regret) == 0:
+            self.cumulative_regret.append(step_regret)
+        else:
+            self.cumulative_regret.append(
+                self.cumulative_regret[-1] + step_regret
+            )
+
         record_csv(epoch=self.epochs_taken,
                    strategy=self.strategy.name,
                    arm=arm,
@@ -95,8 +116,9 @@ class Agent():
                    cumulative=self.cumulative_reward,
                    optimal=isOptimal)
 
-        record_logs(
-            f"Epoch: {self.epochs_taken} | Arm: {arm} | Current Reward: {reward:.3f} | Cumulative Reward : {self.cumulative_reward:.3f} | Current Strategy : {self.strategy.name}")
+        if (self.epochs_taken % 100 == 0):
+            record_logs(
+                f"Epoch: {self.epochs_taken} | Arm: {arm} | Current Reward: {reward:.3f} | Cumulative Reward : {self.cumulative_reward:.3f} | Current Strategy : {self.strategy.name}")
 
         return reward
 
@@ -132,3 +154,6 @@ class Agent():
 
     def reinitalize_agent(self):
         self.reward_history = []
+
+    def update_enviroment(self, new_enviroment):
+        self.environment = new_enviroment

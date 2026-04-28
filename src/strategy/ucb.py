@@ -7,7 +7,7 @@ class UCB(Strategy):
 
     def __init__(self, c):
         self.name = "UCB"
-        self.c = c
+        self.value = c
 
     def select_arm(self, agent):
         for i in range(len(agent.counts)):
@@ -15,7 +15,7 @@ class UCB(Strategy):
                 return i
         total_count = np.sum(agent.counts)
 
-        explore_criteria = self.c * \
+        explore_criteria = self.value * \
             np.sqrt(np.log(total_count)/(np.array(agent.counts)))
         arm = np.argmax(agent.estimated_rewards + explore_criteria)
         return arm
